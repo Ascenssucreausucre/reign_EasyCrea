@@ -13,7 +13,7 @@
                     <h2>{{ deckDetail.deck.titre_deck }}</h2>
                     <p class="nb-cartes"><strong>Nombre de cartes :</strong> {{ deckDetail.nombre_cartes }}/{{ deckDetail.deck.nb_cartes }}</p>
 
-                    {% if not deckDetail.est_expire %}
+                    {% if not deckDetail.est_expire and deckDetail.nombre_cartes < deckDetail.deck.nb_cartes %}
                         <p class="date-max">Fin de la période de création le <strong>{{ deckDetail.deck.date_fin_deck }}</strong></p>
 
                         {# Affichage du temps restant #}

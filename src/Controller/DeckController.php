@@ -123,7 +123,7 @@ class DeckController extends Controller
                         'date_debut_deck' => $dateDebut,
                         'date_fin_deck' => $dateFin,
                         'nb_cartes' => $nbCartes,
-                        'id_administrateur' => $_SESSION['admin']['id_administrateur'] // ID admin de la session
+                        'id_administrateur' => $_SESSION['admin'] // ID admin de la session
                     ]);
     
                     if ($deckId) {
@@ -169,82 +169,93 @@ class DeckController extends Controller
         error_log("Données POST: " . print_r($_POST, true));
         $idDeck = intval($idDeck); // Convertit l'ID du deck en entier
         $verif = Deck::getInstance()->find($idDeck);
-        
-
+    
+        // Récupérer les informations du deck, y compris nb_cartes
+        $nbCartesMax = $verif['nb_cartes'];
+    
+        // Vérifiez si le deck existe
+        if (!$verif) {
+            return HTTP::redirect('/');
+        }
+    
         $dateFin = new \DateTime($verif['date_fin_deck']);
         $now = new \DateTime();
-        $interval = $now->diff($dateFin);
         $estDateExpiree = ($now > $dateFin);
-        if ($estDateExpiree) {
+    
+        // Compter le nombre de cartes existantes dans le deck
+        $nombreCartesExistantes = Carte::getInstance()->compterCartesPourDeck($idDeck);
+        
+        // Vérifiez si la date est expirée ou si le nombre de cartes dépasse le maximum autorisé
+        if ($estDateExpiree || $nombreCartesExistantes >= $nbCartesMax) {
             return HTTP::redirect('/');
         } else {
             // Récupérer une carte aléatoire du deck
-        $carteAleatoire = Carte::getInstance()->getCarteAleatoireDuDeck($idDeck);
+            $carteAleatoire = Carte::getInstance()->getCarteAleatoireDuDeck($idDeck);
     
-        if ($this->isPostMethod()) {
-            // Récupérer la carte soumise par le créateur
-            $nouvelleCarte = $_POST['texte_carte'] ?? null;
+            if ($this->isPostMethod()) {
+                // Récupérer la carte soumise par le créateur
+                $nouvelleCarte = $_POST['texte_carte'] ?? null;
     
-            // Récupérer les valeurs pour Choix 1
-            $valeursChoix1Text = $_POST['valeurs_choix1_text'] ?? null;
-            $valeursChoix1Nb1 = $_POST['valeurs_choix1_nb1'] ?? null;
-            $valeursChoix1Nb2 = $_POST['valeurs_choix1_nb2'] ?? null;
+                // Récupérer les valeurs pour Choix 1
+                $valeursChoix1Text = $_POST['valeurs_choix1_text'] ?? null;
+                $valeursChoix1Nb1 = $_POST['valeurs_choix1_nb1'] ?? null;
+                $valeursChoix1Nb2 = $_POST['valeurs_choix1_nb2'] ?? null;
     
-            // Récupérer les valeurs pour Choix 2
-            $valeursChoix2Text = $_POST['valeurs_choix2_text'] ?? null;
-            $valeursChoix2Nb1 = $_POST['valeurs_choix2_nb1'] ?? null;
-            $valeursChoix2Nb2 = $_POST['valeurs_choix2_nb2'] ?? null;
+                // Récupérer les valeurs pour Choix 2
+                $valeursChoix2Text = $_POST['valeurs_choix2_text'] ?? null;
+                $valeursChoix2Nb1 = $_POST['valeurs_choix2_nb1'] ?? null;
+                $valeursChoix2Nb2 = $_POST['valeurs_choix2_nb2'] ?? null;
     
-            try {
-                // Validation des champs
-                if (empty($nouvelleCarte) || empty($valeursChoix1Text) || empty($valeursChoix1Nb1) || empty($valeursChoix1Nb2) ||
-                    empty($valeursChoix2Text) || empty($valeursChoix2Nb1) || empty($valeursChoix2Nb2)) {
-                    throw new \Exception("Tous les champs sont requis.");
+                try {
+                    // Validation des champs
+                    if (empty($nouvelleCarte) || empty($valeursChoix1Text) || empty($valeursChoix1Nb1) || empty($valeursChoix1Nb2) ||
+                        empty($valeursChoix2Text) || empty($valeursChoix2Nb1) || empty($valeursChoix2Nb2)) {
+                        throw new \Exception("Tous les champs sont requis.");
+                    }
+    
+                    // Vérifier si le créateur a déjà ajouté une carte à ce deck
+                    if (Carte::getInstance()->carteExistantePourDeck($idDeck, $_SESSION['user']['id_createur'])) {
+                        throw new \Exception("Vous avez déjà ajouté une carte à ce deck.");
+                    }
+    
+                    // Créer les tableaux de valeurs pour chaque choix
+                    $valeursChoix1 = [
+                        'text' => $valeursChoix1Text,
+                        'number1' => intval($valeursChoix1Nb1),
+                        'number2' => intval($valeursChoix1Nb2)
+                    ];
+    
+                    $valeursChoix2 = [
+                        'text' => $valeursChoix2Text,
+                        'number1' => intval($valeursChoix2Nb1),
+                        'number2' => intval($valeursChoix2Nb2)
+                    ];
+    
+                    // Convertir les tableaux en JSON pour stockage dans la base de données
+                    $valeursChoix1Json = json_encode($valeursChoix1);
+                    $valeursChoix2Json = json_encode($valeursChoix2);
+    
+                    // Insérer la carte dans la table `carte`
+                    $idCarte = Carte::getInstance()->creer([
+                        'texte_carte' => $nouvelleCarte,
+                        'valeurs_choix1' => $valeursChoix1Json,
+                        'valeurs_choix2' => $valeursChoix2Json,
+                        'id_createur' => $_SESSION['user']['id_createur'] // ID du créateur connecté
+                    ]);
+    
+                    // Associer la carte au deck dans la table `carte_deck`
+                    Carte::getInstance()->associerCarteAuDeck($idCarte, $idDeck);
+    
+                    return $this->display('/createur/success.twig', ['message' => 'Carte ajoutée avec succès !']);
+    
+                } catch (\Exception $e) {
+                    return $this->display('/deck/ajouter-carte.html.twig', [
+                        'error' => $e->getMessage(),
+                        'carteAleatoire' => $carteAleatoire,
+                        'idDeck' => $idDeck
+                    ]);
                 }
-    
-                // Vérifier si le créateur a déjà ajouté une carte à ce deck
-                if (Carte::getInstance()->carteExistantePourDeck($idDeck, $_SESSION['user']['id_createur'])) {
-                    throw new \Exception("Vous avez déjà ajouté une carte à ce deck.");
-                }
-    
-                // Créer les tableaux de valeurs pour chaque choix
-                $valeursChoix1 = [
-                    'text' => $valeursChoix1Text,
-                    'number1' => intval($valeursChoix1Nb1),
-                    'number2' => intval($valeursChoix1Nb2)
-                ];
-    
-                $valeursChoix2 = [
-                    'text' => $valeursChoix2Text,
-                    'number1' => intval($valeursChoix2Nb1),
-                    'number2' => intval($valeursChoix2Nb2)
-                ];
-    
-                // Convertir les tableaux en JSON pour stockage dans la base de données
-                $valeursChoix1Json = json_encode($valeursChoix1);
-                $valeursChoix2Json = json_encode($valeursChoix2);
-    
-                // Insérer la carte dans la table `carte`
-                $idCarte = Carte::getInstance()->creer([
-                    'texte_carte' => $nouvelleCarte,
-                    'valeurs_choix1' => $valeursChoix1Json,
-                    'valeurs_choix2' => $valeursChoix2Json,
-                    'id_createur' => $_SESSION['user']['id_createur'] // ID du créateur connecté
-                ]);
-    
-                // Associer la carte au deck dans la table `carte_deck`
-                Carte::getInstance()->associerCarteAuDeck($idCarte, $idDeck);
-    
-                return $this->display('/createur/success.twig', ['message' => 'Carte ajoutée avec succès !']);
-    
-            } catch (\Exception $e) {
-                return $this->display('/deck/ajouter-carte.html.twig', [
-                    'error' => $e->getMessage(),
-                    'carteAleatoire' => $carteAleatoire,
-                    'idDeck' => $idDeck
-                ]);
             }
-        }
         }
     
         // Si ce n'est pas une requête POST, on affiche le formulaire
@@ -253,6 +264,7 @@ class DeckController extends Controller
             'idDeck' => $idDeck
         ]);
     }
+    
     
 
 }

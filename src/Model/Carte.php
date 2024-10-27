@@ -90,6 +90,14 @@ class Carte extends Model
     
         return $cartes; // Retourne toutes les cartes avec les valeurs JSON décodées
     }
+    public function compterCartesPourDeck(int $idDeck): int {
+        $sql = "SELECT COUNT(*) FROM carte_deck WHERE id_deck = :id_deck";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':id_deck' => $idDeck]);
+        
+        // Retourner le nombre de cartes
+        return (int) $stmt->fetchColumn();
+    }
     
     
 }
