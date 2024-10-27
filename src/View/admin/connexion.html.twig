@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Connexion - {{parent()}}{% endblock %}
+{% block content %}
+
+<h1>Connexion</h1>
+    <form action="{{ url('/admin/connexion') }}" method="POST">
+        <label for="email">Email :</label>
+        <input type="email" name="email" required>
+        
+        <label for="passwd">Mot de passe :</label>
+        <input type="password" name="passwd" required>
+        
+        <button type="submit">Se connecter</button>
+    </form>
+    <div>
+        <a href="{{ url('/admin/inscription') }}">Pas encore inscrit ?</a>
+    </div>
+{% endblock %}

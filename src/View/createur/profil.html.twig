@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Profil de l'utilisateur - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+    <h2>Profil de {{ username }}</h2>
+    <h3>Vos cartes</h3>
+
+
+    {% if cartes is empty %}
+        <p>Aucune carte trouvée.</p>
+    {% else %}
+        <section class="carte-container">
+            {% for carte in cartes %}
+                <div class="carte">
+                    <strong>Texte de la carte :</strong> {{ carte.texte_carte }}<br>
+                    <p><strong>Choix 1 :</strong> {{ carte.valeurs_choix1.text }} <br> Coût : {{ carte.valeurs_choix1.number1 }} {{ carte.valeurs_choix1.number2 }}</p>
+                    <p><strong>Choix 2 :</strong> {{ carte.valeurs_choix2.text }} <br> Coût : {{ carte.valeurs_choix2.number1 }} {{ carte.valeurs_choix2.number2 }}</p>
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+{% endblock %}

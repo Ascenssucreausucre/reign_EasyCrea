@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Inscription - {{parent()}}{% endblock %}
+{% block content %}
+
+    <h2>Formulaire d'inscription</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url('/createur/inscription') }}" method="POST">
+        <label for="nom_createur">Nom :</label><br>
+        <input type="text" id="nom_createur" name="nom_createur" required><br><br>
+
+        <label for="ad_mail_createur">Email :</label><br>
+        <input type="email" id="ad_mail_createur" name="ad_mail_createur" required><br><br>
+
+        <label for="mdp_createur">Mot de passe :</label><br>
+        <input type="password" id="mdp_createur" name="mdp_createur" required><br><br>
+
+        <label for="genre">Genre :</label><br>
+        <select id="genre" name="genre">
+            <option value="Homme">Homme</option>
+            <option value="Femme">Femme</option>
+            <option value="Autre">Autre</option>
+        </select><br><br>
+
+        <label for="ddn">Date de naissance :</label><br>
+        <input type="date" id="ddn" name="ddn" required><br><br>
+
+        <button type="submit">S'inscrire</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Decks {{ parent() }}{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>Les decks</h1>
+
+    {# Vérifier si deckDetails est bien défini et non vide #}
+    {% if deckDetails is defined %}
+        <div class="deck-container">
+            {# Boucle sur les détails du deck #}
+            {% for deckDetail in deckDetails %}
+                <section class="deck-card">
+                    <h2>{{ deckDetail.deck.titre_deck }}</h2>
+                    <p class="nb-cartes"><strong>Nombre de cartes :</strong> {{ deckDetail.nombre_cartes }}/{{ deckDetail.deck.nb_cartes }}</p>
+
+                    {% if not deckDetail.est_expire %}
+                        <p class="date-max">Fin de la période de création le <strong>{{ deckDetail.deck.date_fin_deck }}</strong></p>
+
+                        {# Affichage du temps restant #}
+                        <p>Temps restant :
+                            {% if deckDetail.temps_restant.days is defined and deckDetail.temps_restant.days > 0 %}
+                                {{ deckDetail.temps_restant.days }} jour(s)
+                            {% elseif deckDetail.temps_restant.hours is defined and deckDetail.temps_restant.hours > 0 %}
+                                {{ deckDetail.temps_restant.hours }} heure(s)
+                            {% elseif deckDetail.temps_restant.minutes is defined and deckDetail.temps_restant.minutes > 0 %}
+                                {{ deckDetail.temps_restant.minutes }} minute(s)
+                            {% else %}
+                                {{ deckDetail.temps_restant }}
+                            {% endif %}
+                        </p>
+
+                        <a href="{{ url('/deck/' ~ deckDetail.deck.id_deck ~ '/ajouter-carte') }}" class="btn">Ajouter une carte</a>
+                    {% else %}
+                        <p class="date-max"><strong>Période de création terminée le {{ deckDetail.deck.date_fin_deck }}</strong></p>
+                        <button class="btn" disabled>Ajout de carte fermé</button>
+                    {% endif %}
+                </section>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun deck n'est enregistré pour le moment.</p>
+    {% endif %}
+  </div>
+{% endblock %}

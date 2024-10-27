@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+ <html lang="fr">
+ 
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="{{ url('/css/style.css') }}">
+ <title>{% block title %}EasyCrea{% endblock %}</title>
+</head>
+<body>
+<header>
+   <div class="navbar">
+   {% if session.user or session.admin %}
+     <a href="{{ url('/createur/deconnexion') }}" class="btn btn-primary m-4">Déconnexion</a>
+     <a href="{{ url('/createur/profil') }}" class="btn btn-primary m-4">Mon profil</a>
+   {% else %}
+     <a href="{{ url('/createur/inscription') }}" class="btn btn-primary m-4">Inscription</a>
+     <a href="{{ url('/createur/connexion') }}" class="btn btn-primary m-4">Connexion</a>
+   {% endif %}
+    <a href="{{ url('/') }}" class="btn btn-primary m-4">Accueil</a>
+    </div>
+    {% if session.user %}
+           <p class="bvn">Bienvenue, {{ session.user.nom_createur }}</p>
+       {% elseif session.admin %}
+           <p class="bvn">Bienvenue, Administrateur</p>
+       {% endif %}
+</header>
+ {% block content %}{% endblock %}
+ <!-- JS -->
+ {% block js %}{% endblock -%}
+</body>
+</html>

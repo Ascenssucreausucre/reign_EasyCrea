@@ -1,0 +1,36 @@
+# Ignore les fichiers de configuration dans public/src/config
+/src/Config
+/src/Storage/
+
+# Dépendances Composer
+# /vendor/
+
+# Fichiers d'environnement
+.env
+.env.*.local
+
+# Caches
+/cache/
+public/cache/
+public/logs/
+tmp/
+*.log
+
+# Configuration IDE (si tu utilises PHPStorm, VSCode, etc.)
+.idea/
+.vscode/
+*.iml
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Sauvegardes créées par l'éditeur
+*.bak
+*.swp
+*~
+
+# Autres fichiers générés (si applicable)
+public/build/
+node_modules/
+dist/

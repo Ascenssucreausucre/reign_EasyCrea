@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Ajouter une carte - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+    <h2>Ajouter une nouvelle carte au deck</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if carteAleatoire %}
+    <div class="random-card">
+        <h3>Carte aléatoire du deck</h3>
+        <p><strong>Texte :</strong> {{ carteAleatoire.texte_carte }}</p>
+        <p><strong>Choix 1 :</strong> {{ carteAleatoire.valeurs_choix1.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} {{ carteAleatoire.valeurs_choix1.number2 }}</p>
+        <p><strong>Choix 2 :</strong> {{ carteAleatoire.valeurs_choix2.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} {{ carteAleatoire.valeurs_choix1.number2 }}</p>
+    </div>
+    {% endif %}
+
+    <form action="{{ url('/deck/' ~ idDeck ~ '/ajouter-carte') }}" method="POST">
+        <label for="texte_carte">Texte de la carte :</label>
+        <textarea id="texte_carte" name="texte_carte" required></textarea>
+
+        <label for="valeurs_choix1">Valeur du Choix 1 :</label>
+        <textarea id="valeurs_choix1_text" name="valeurs_choix1_text" required></textarea>
+        <div>
+            <input type="number" id="valeurs_choix1_nb1" name="valeurs_choix1_nb1" required>
+            <input type="number" id="valeurs_choix1_nb2" name="valeurs_choix1_nb2" required>
+        </div>
+
+        <label for="valeurs_choix1">Valeur du Choix 2 :</label>
+        <textarea id="valeurs_choix2_text" name="valeurs_choix2_text" required></textarea>
+        <div>
+            <input type="number" id="valeurs_choix2_nb1" name="valeurs_choix2_nb1" required>
+            <input type="number" id="valeurs_choix2_nb2" name="valeurs_choix2_nb2" required>
+        </div>
+
+        <button type="submit">Ajouter la carte</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  Détails du parcours - {{ parcours.nom }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="display-1">Parcours : {{ parcours.nom }}</h1>
+    <p class="lead">{{ parcours.description }}</p>
+    
+    <h2>Modules inclus :</h2>
+    <ul>
+      {% for module in parcours.modules %}
+        <li>{{ module.nom }}</li>
+      {% endfor %}
+    </ul>
+
+    <a href="{{ url('/') }}" class="btn btn-primary">Retour à l'accueil</a>
+  </div>
+{% endblock %}

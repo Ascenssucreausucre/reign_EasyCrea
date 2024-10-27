@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Cartes - {{parent()}}{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1 class="display-1">Les cartes</h1>
+
+    <a href="{{ url('/deck') }}" class="btn btn-primary m-4">decks</a>
+
+
+
+    {% if carte|length == 0  %}
+    <p>Aucun carte n'est enregistré pour le moment.</p>
+    {% endif %}
+
+    {% for carte in cartes %}
+        <section class="row mb-3 bg-light">
+      <div class="col-md-8">
+        <h2>{{ carte.texte_carte }}</h2>
+        <p class="m-0 text-muted fw-lighter ms-4">{{ carte.valeurs_choix1 }} {{ carte.valeurs_choix2 }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
