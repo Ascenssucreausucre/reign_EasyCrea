@@ -114,6 +114,7 @@ textarea{
     margin-bottom: 10px;
     border-radius: 5px;
     height: 60px;
+    padding: 2px 5px;
 }
 
 textarea:first-of-type{

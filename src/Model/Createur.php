@@ -9,7 +9,7 @@ class Createur extends Model
 {
     use TraitInstance;
 
-    protected $tableName = APP_TABLE_PREFIX . 'Createur';
+    protected $tableName = APP_TABLE_PREFIX . 'createur';
 
     /**
      * Inscription d'un créateur
