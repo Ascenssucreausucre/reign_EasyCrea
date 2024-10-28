@@ -2,7 +2,8 @@
 {% block title %}Connexion - {{parent()}}{% endblock %}
 {% block content %}
 
-<h1>Connexion</h1>
+<div class="form-container">
+    <h1>Connexion</h1>
     <form action="{{ url('/admin/connexion') }}" method="POST">
         <label for="email">Email :</label>
         <input type="email" name="email" required>
@@ -15,4 +16,5 @@
     <div>
         <a href="{{ url('/admin/inscription') }}">Pas encore inscrit ?</a>
     </div>
+</div>
 {% endblock %}

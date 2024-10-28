@@ -18,7 +18,7 @@
         <p><strong>Choix 2 :</strong> {{ carteAleatoire.valeurs_choix2.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} {{ carteAleatoire.valeurs_choix1.number2 }}</p>
     </div>
     {% endif %}
-
+<div class="form-container">
     <form action="{{ url('/deck/' ~ idDeck ~ '/ajouter-carte') }}" method="POST">
         <label for="texte_carte">Texte de la carte :</label>
         <textarea id="texte_carte" name="texte_carte" required></textarea>
@@ -39,5 +39,5 @@
 
         <button type="submit">Ajouter la carte</button>
     </form>
-
+</div>
 {% endblock %}

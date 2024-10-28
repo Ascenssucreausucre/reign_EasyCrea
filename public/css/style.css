@@ -14,6 +14,7 @@
 body{
     font-weight: 400;    
     width: 100vw;
+    padding-top: 60px;
 }
 .navbar{
     background-color: #780000;
@@ -68,6 +69,12 @@ h1{
 .btn:disabled{
     background-color: gray;
 }
+
+.form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 form{
     display: flex;
     flex-direction: column;
@@ -80,6 +87,7 @@ form{
     color: white;
     border-radius: 10px;
     padding: 10px 20px;
+    text-align: center;
 }
 form label{
     font-size: 20px;
@@ -95,6 +103,7 @@ form div input{
 }
 input{
     height: 36px;
+    border-radius: 5px;
 }
 textarea{
     width: 80%;
