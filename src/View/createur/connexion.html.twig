@@ -6,10 +6,10 @@
     <h1>Connexion</h1>
     <form action="{{ url('/createur/connexion') }}" method="POST">
         <label for="email">Email :</label>
-        <input type="email" name="email" required>
+        <input type="email" name="email" placeholder="Adresse mail" required>
         
         <label for="passwd">Mot de passe :</label>
-        <input type="password" name="passwd" required>
+        <input type="password" name="passwd" placeholder="Mot de passe" required>
         
         <button type="submit">Se connecter</button>
     </form>

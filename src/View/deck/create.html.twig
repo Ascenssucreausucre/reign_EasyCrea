@@ -13,7 +13,7 @@
 
     <!-- Champs pour les informations du deck -->
     <label for="titre_deck">Titre du Deck :</label>
-    <input type="text" id="titre_deck" name="titre_deck" required>
+    <input type="text" id="titre_deck" name="titre_deck" placeholder="Titre du deck" required>
 
     <label for="date_debut_deck">Date de début :</label>
     <input type="date" id="date_debut_deck" name="date_debut_deck" required>
@@ -22,25 +22,25 @@
     <input type="date" id="date_fin_deck" name="date_fin_deck" required>
 
     <label for="nb_cartes">Nombre de cartes :</label>
-    <input type="number" id="nb_cartes" name="nb_cartes" required>
+    <input type="number" id="nb_cartes" name="nb_cartes" placeholder="Nombre de carte max du deck" required>
     <!-- Champs pour la première carte -->
     <h3>Ajouter la première carte</h3>
 
     <label for="texte_carte">Texte de la carte :</label>
-        <textarea id="texte_carte" name="texte_carte" required></textarea>
+        <textarea id="texte_carte" name="texte_carte" placeholder="Texte de la carte" required></textarea>
 
         <label for="valeurs_choix1">Valeur du Choix 1 :</label>
-        <textarea id="valeurs_choix1_text" name="valeurs_choix1_text" required></textarea>
+        <textarea id="valeurs_choix1_text" name="valeurs_choix1_text" placeholder="Choix 1" required></textarea>
         <div style="display: flex;">
-            <input type="number" id="valeurs_choix1_nb1" name="valeurs_choix1_nb1" required>
-            <input type="number" id="valeurs_choix1_nb2" name="valeurs_choix1_nb2" required>
+            <input type="number" id="valeurs_choix1_nb1" name="valeurs_choix1_nb1" placeholder="population" required>
+            <input type="number" id="valeurs_choix1_nb2" name="valeurs_choix1_nb2" placeholder="foi" required>
         </div>
 
         <label for="valeurs_choix1">Valeur du Choix 2 :</label>
-        <textarea id="valeurs_choix2_text" name="valeurs_choix2_text" required></textarea>
+        <textarea id="valeurs_choix2_text" name="valeurs_choix2_text" placeholder="Choix 2" required></textarea>
         <div style="display: flex;">
-            <input type="number" id="valeurs_choix2_nb1" name="valeurs_choix2_nb1" required>
-            <input type="number" id="valeurs_choix2_nb2" name="valeurs_choix2_nb2" required>
+            <input type="number" id="valeurs_choix2_nb1" name="valeurs_choix2_nb1" placeholder="population" required>
+            <input type="number" id="valeurs_choix2_nb2" name="valeurs_choix2_nb2" placeholder="foi" required>
         </div>
 
         <button type="submit">Créer le Deck et ajouter la Carte</button>
