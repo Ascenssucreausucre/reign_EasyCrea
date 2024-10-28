@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Helper\HTTP;
 use App\Model\Createur;
 use App\Model\Carte;
+use App\Model\Admin;
 
 class CreateurController extends Controller
 {
@@ -81,47 +82,61 @@ class CreateurController extends Controller
 
     // Gérer la connexion
     public function connexion()
-    {
-        // Vérifier si c'est une requête POST
-        if ($this->isPostMethod()) {
-            $email = $_POST['email'] ?? null;
-            $motDePasse = $_POST['passwd'] ?? null;
+{
+    // Vérifier si c'est une requête POST
+    if ($this->isPostMethod()) {
+        $email = $_POST['email'] ?? null;
+        $motDePasse = $_POST['passwd'] ?? null;
 
-            try {
-                // Validation des champs
-                if (empty($email) || empty($motDePasse)) {
-                    throw new \Exception("Tous les champs sont requis.");
-                }
+        try {
+            // Validation des champs
+            if (empty($email) || empty($motDePasse)) {
+                throw new \Exception("Tous les champs sont requis.");
+            }
 
-                // Vérifier si l'utilisateur existe
-                $createur = Createur::getInstance()->getByEmail($email);
-                if (!$createur) {
-                    throw new \Exception("Identifiants invalides.");
-                }
-
-                // Vérifier le mot de passe (en supposant que tu utilises password_hash et password_verify)
+            // Vérifier si l'utilisateur est un créateur
+            $createur = Createur::getInstance()->getByEmail($email);
+            if ($createur) {
+                // Vérifier le mot de passe pour le créateur
                 if (!password_verify($motDePasse, $createur['mdp_createur'])) {
                     throw new \Exception("Identifiants invalides.");
                 }
-                // Connexion réussie
-                // Ici, tu peux établir une session utilisateur ou tout autre traitement nécessaire
+
+                // Connexion réussie pour le créateur
                 $_SESSION['user'] = [
                     'id_createur' => $createur['id_createur'],
                     'nom_createur' => $createur['nom_createur']
-                ]; // Exemples de stockage de données utilisateur dans la session
+                ];
                 return HTTP::redirect('/');
-
-
-            } catch (\Exception $e) {
-                // Gestion des erreurs
-                // return $this->display('/createur/connexion.html.twig', ['message' => $e->getMessage(), 'success' => false]);
-                echo 'Erreur : ' . $e->getMessage();
             }
-        }
 
-        // Si ce n'est pas une requête POST, afficher le formulaire
-        return $this->afficherFormulaireConnexion();
+            // Si aucun créateur n'est trouvé, vérifier s'il s'agit d'un administrateur
+            $admin = Admin::getInstance()->getByEmail($email);
+            if ($admin) {
+                // Vérifier le mot de passe pour l'administrateur
+                if (!password_verify($motDePasse, $admin['mdp_admin'])) {
+                    throw new \Exception("Identifiants invalides.");
+                }
+
+                // Connexion réussie pour l'administrateur
+                $_SESSION['admin'] = $admin['id_administrateur']; // Remarque : session basée sur votre code fourni
+                return HTTP::redirect('/');
+            }
+
+            // Si aucun utilisateur n'est trouvé, lancer une exception
+            throw new \Exception("Identifiants invalides.");
+
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            echo 'Erreur : ' . $e->getMessage();
+        }
     }
+
+    // Si ce n'est pas une requête POST, afficher le formulaire de connexion
+    return $this->afficherFormulaireConnexion();
+}
+
+
 
     public function deconnexion()
     {

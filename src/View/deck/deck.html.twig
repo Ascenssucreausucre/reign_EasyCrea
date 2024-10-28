@@ -36,6 +36,9 @@
                     {% endif %}
                 </section>
             {% endfor %}
+            {% if session.admin %}
+            <a href="{{ url('/deck/create') }}" class="btn btn-primary m-4">Ajouter un deck</a>
+            {% endif %}
         </div>
     {% else %}
         <p>Aucun deck n'est enregistré pour le moment.</p>

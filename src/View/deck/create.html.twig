@@ -8,6 +8,7 @@
     <p style="color: red;">{{ error }}</p>
 {% endif %}
 
+<div class="form-container">
 <form action="{{ url('/deck/create') }}" method="POST">
 
     <!-- Champs pour les informations du deck -->
@@ -22,7 +23,6 @@
 
     <label for="nb_cartes">Nombre de cartes :</label>
     <input type="number" id="nb_cartes" name="nb_cartes" required>
-<div class="form-container">
     <!-- Champs pour la première carte -->
     <h3>Ajouter la première carte</h3>
 
@@ -43,8 +43,8 @@
             <input type="number" id="valeurs_choix2_nb2" name="valeurs_choix2_nb2" required>
         </div>
 
-    <button type="submit">Créer le Deck et ajouter la Carte</button>
-</form>
+        <button type="submit">Créer le Deck et ajouter la Carte</button>
+    </form>
 </div>
 
 {% endblock %}

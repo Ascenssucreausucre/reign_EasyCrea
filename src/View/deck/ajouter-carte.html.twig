@@ -4,7 +4,6 @@
 
 {% block content %}
 
-    <h2>Ajouter une nouvelle carte au deck</h2>
 
     {% if error %}
         <p style="color: red;">{{ error }}</p>
@@ -12,10 +11,11 @@
 
     {% if carteAleatoire %}
     <div class="random-card">
+    <h2>Ajouter une nouvelle carte au deck</h2>
         <h3>Carte aléatoire du deck</h3>
         <p><strong>Texte :</strong> {{ carteAleatoire.texte_carte }}</p>
-        <p><strong>Choix 1 :</strong> {{ carteAleatoire.valeurs_choix1.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} {{ carteAleatoire.valeurs_choix1.number2 }}</p>
-        <p><strong>Choix 2 :</strong> {{ carteAleatoire.valeurs_choix2.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} {{ carteAleatoire.valeurs_choix1.number2 }}</p>
+        <p><strong>Choix 1 :</strong> {{ carteAleatoire.valeurs_choix1.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} population, {{ carteAleatoire.valeurs_choix1.number2 }} foi</p>
+        <p><strong>Choix 2 :</strong> {{ carteAleatoire.valeurs_choix2.text }} <br> Coût : {{ carteAleatoire.valeurs_choix1.number1 }} population, {{ carteAleatoire.valeurs_choix1.number2 }} foi</p>
     </div>
     {% endif %}
 <div class="form-container">
